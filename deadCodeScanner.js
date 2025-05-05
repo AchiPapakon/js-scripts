@@ -32,13 +32,11 @@ const getAllJsFiles = (dirPath, arrayOfFiles = []) => {
 // The array of all the JavaScript files
 const arrayOfJsFiles = getAllJsFiles(path.join(__dirname, '../src'));
 console.log('Number of js files:', arrayOfJsFiles.length);
-// console.log('Files:', arrayOfJsFiles);
 
 // The array of all the functions or variables
 const allVariablesAndFunctions = new Set();
 
 // The array of all the functions or variables which are never called
-// const deadList = [];
 const votingList = {};
 
 const allVariablesAndFunctionsPromises = [];
@@ -48,14 +46,12 @@ arrayOfJsFiles.forEach(jsFile => {
         new Promise(resolve => {
             const readInterface = readline.createInterface({
                 input: fs.createReadStream(jsFile),
-                // output: process.stdout,
                 console: false,
             });
 
             readInterface.on('line', line => {
                 const m = line.match(/^(?:export )*(?:const|function\**) (\w+)/);
                 if (m) {
-                    // console.log(m[1]);
                     allVariablesAndFunctions.add(m[1]);
                 }
             });
@@ -100,8 +96,6 @@ Promise.all(allVariablesAndFunctionsPromises).then(() => {
     });
 
     Promise.all(votingListPromises).then(() => {
-        // console.log('Voting list:', votingList);
-
         // Final dead code list
         const deadList = Object.entries(votingList).reduce((list, pair) => {
             if (pair[1] === 1) {
